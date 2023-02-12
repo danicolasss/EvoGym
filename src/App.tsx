@@ -1,12 +1,44 @@
 import Navbar from "@/scenes/navbar";
-
+import Home from "@/scenes/home";
+import OurClasses from "@/scenes/ourClasses";
+import Benefits from "@/scenes/benefits";
+import ContactUs from "@/scenes/contactUs";
+import Footer from "@/scenes/footer";
+import { useEffect, useState } from "react";
+import { SelectedPage } from "@/shared/types";
 
 function App() {
  
+  const [selectedPage,setSelectedPage] =  useState<SelectedPage>(
+    SelectedPage.Accueil
+    );
+    const [isTopOfPage ,setIsTopOfPage] = useState<boolean>(true); 
 
+    useEffect(()=>{
+      const handeleScroll = () =>{
+        if (window.scrollY === 0 ){
+          setIsTopOfPage(true);
+          setSelectedPage(SelectedPage.Accueil);
+        }
+
+        if (window.scrollY !== 0){
+          setIsTopOfPage(false);
+        }
+      }
+      window.addEventListener("scroll",handeleScroll);
+      return ()=> window.removeEventListener("scroll",handeleScroll);
+    },[])
   return (
     <div className="app bg-gray-20 ">
-      <Navbar/>
+      <Navbar
+       isTopOfPage = {isTopOfPage}
+       selectedPage={selectedPage} 
+       setSelectedPage={setSelectedPage}  />
+       <Home  setSelectedPage={setSelectedPage}  />
+       <Benefits setSelectedPage={setSelectedPage}  />
+       <OurClasses setSelectedPage={setSelectedPage} />
+       <ContactUs setSelectedPage={setSelectedPage} />
+       <Footer />
     </div>
   )
 }
